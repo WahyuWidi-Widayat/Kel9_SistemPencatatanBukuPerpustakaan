@@ -31,4 +31,6 @@ Route::middleware(['auth', 'checkRole:root'])->get('/root/dashboard', function (
     return view('dashboard.root');
 })->name('dashboard.root');
 
+
+
 require __DIR__.'/auth.php';
