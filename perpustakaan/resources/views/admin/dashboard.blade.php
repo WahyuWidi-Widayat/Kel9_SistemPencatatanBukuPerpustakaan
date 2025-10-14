@@ -13,7 +13,9 @@
                     <p class="text-gray-600 dark:text-gray-400">Pilih menu di bawah untuk mulai mengelola konten.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Grid diubah untuk menampung 3 item dengan lebih baik --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {{-- KARTU MANAJEMEN BUKU --}}
                     <a href="{{ route('admin.books.index') }}" class="block group">
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg p-6 flex items-start gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                             <div class="flex-shrink-0 bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
@@ -28,6 +30,7 @@
                         </div>
                     </a>
 
+                    {{-- KARTU MANAJEMEN PENGGUNA --}}
                     <a href="{{ route('admin.users.index') }}" class="block group">
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg p-6 flex items-start gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                              <div class="flex-shrink-0 bg-green-100 dark:bg-green-900 p-3 rounded-full">
@@ -41,6 +44,24 @@
                             </div>
                         </div>
                     </a>
+
+                    {{-- === KARTU BARU: MANAJEMEN PEMINJAMAN === --}}
+                    <a href="{{ route('admin.borrowings.index') }}" class="block group">
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg p-6 flex items-start gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                            <div class="flex-shrink-0 bg-yellow-100 dark:bg-yellow-900 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m-4.5-15v15m9-15v15" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-yellow-600">Manajemen Peminjaman</h3>
+                                <p class="text-gray-500 dark:text-gray-400 mt-1">Kelola semua data peminjaman buku oleh pengguna.</p>
+                            </div>
+                        </div>
+                    </a>
+                    {{-- === AKHIR DARI KARTU BARU === --}}
+
                 </div>
             </div>
         </div>

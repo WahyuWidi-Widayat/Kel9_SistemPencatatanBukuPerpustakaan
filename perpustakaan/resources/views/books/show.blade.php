@@ -35,6 +35,31 @@
                                     <p><strong>Genre:</strong><br><span class="text-gray-600 dark:text-gray-400">{{ $book->genre }}</span></p>
                                 </div>
                             </div>
+                            <div class="mt-6 p-4 border dark:border-gray-700 rounded-lg">
+    <h3 class="font-bold text-lg mb-2">Status Peminjaman</h3>
+    
+    {{-- Jika buku TERSEDIA --}}
+    @if ($book->status == 'AVAILABLE')
+        <form action="{{ route('borrow.store', $book) }}" method="POST">
+            @csrf
+            <div>
+                <x-input-label for="return_date" value="Pilih Tanggal Kembali" />
+                <x-text-input id="return_date" class="block mt-1 w-full" type="date" name="return_date" required />
+                <x-input-error :messages="$errors->get('return_date')" class="mt-2" />
+            </div>
+            <div class="mt-4">
+                <x-primary-button>
+                    Pinjam Buku Ini
+                </x-primary-button>
+            </div>
+        </form>
+    {{-- Jika buku SEDANG DIPINJAM --}}
+    @else
+        <p class="text-sm font-semibold text-red-600 dark:text-red-400">
+            Buku ini sedang tidak tersedia (dipinjam).
+        </p>
+    @endif
+</div>
                         </div>
 
                         <div class="md:col-span-2">
