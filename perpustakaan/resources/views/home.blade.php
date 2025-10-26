@@ -17,14 +17,30 @@
                         </div>
                     @endif
 
-                    {{-- === FORM PENCARIAN DITAMBAHKAN DI SINI === --}}
-                    <form action="{{ route('home') }}" method="GET" class="mb-8">
+                    {{-- === FORM PENCARIAN === --}}
+                    <form action="{{ route('home') }}" method="GET" class="mb-4">
                         <div class="flex">
                             <input type="text" name="search" placeholder="Cari buku berdasarkan judul atau penulis..." class="w-full rounded-l-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value="{{ request('search') }}">
                             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700">Cari</button>
                         </div>
                     </form>
-                    {{-- === AKHIR DARI FORM PENCARIAN === --}}
+                    
+                    {{-- === FORM SORTING (BARU) === --}}
+                    <form action="{{ route('home') }}" method="GET" class="mb-8">
+                        {{-- Simpan parameter search jika ada --}}
+                        @if (request('search'))
+                            <input type="hidden" name="search" value="{{ request('search') }}">
+                        @endif
+                        
+                        <select name="sort" onchange="this.form.submit()" class="w-full md:w-1/3 border-gray-300 rounded-md shadow-sm">
+                            <option value="latest" @selected(request('sort') == 'latest')>Urutkan: Terbaru</option>
+                            <option value="title_asc" @selected(request('sort') == 'title_asc')>Urutkan: Judul (A-Z)</option>
+                            <option value="title_desc" @selected(request('sort') == 'title_desc')>Urutkan: Judul (Z-A)</option>
+                            <option value="author_asc" @selected(request('sort') == 'author_asc')>Urutkan: Penulis (A-Z)</option>
+                            <option value="author_desc" @selected(request('sort') == 'author_desc')>Urutkan: Penulis (Z-A)</option>
+                        </select>
+                    </form>
+                    {{-- === AKHIR DARI FORM SORTING === --}}
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         @forelse ($books as $book)
@@ -40,6 +56,7 @@
                                         @endif
                                     </div>
                                     <div class="p-4 flex flex-col flex-grow">
+                                        {{-- Anda bisa tambahkan badge status di sini jika mau --}}
                                         <h3 class="font-bold text-lg truncate">{{ $book->title }}</h3>
                                         <p class="text-sm text-gray-600">{{ $book->author }}</p>
                                     </div>

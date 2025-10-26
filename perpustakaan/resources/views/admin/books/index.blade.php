@@ -26,29 +26,67 @@
                     
                     <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            
+                            {{-- === HEADER TABEL (<thead>) DENGAN FITUR SORTING === --}}
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
+                                    {{-- Helper function untuk link sorting --}}
+                                    @php
+                                        function sortable_link($column, $label) {
+                                            $direction = (request('sort') == $column && request('direction') == 'asc') ? 'desc' : 'asc';
+                                            $icon = (request('sort') == $column) ? (request('direction') == 'asc' ? ' &uarr;' : ' &darr;') : '';
+                                            return '<a href="'.route('admin.books.index', ['sort' => $column, 'direction' => $direction]).'" class="flex items-center gap-1">'.$label. $icon.'</a>';
+                                        }
+                                    @endphp
+
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Judul
+                                        {!! sortable_link('title', 'Judul') !!}
                                     </th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Penulis
+                                        {!! sortable_link('author', 'Penulis') !!}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        {!! sortable_link('genre', 'Genre') !!}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Status
                                     </th>
                                     <th scope="col" class="relative px-6 py-3">
                                         <span class="sr-only">Aksi</span>
                                     </th>
                                 </tr>
                             </thead>
+                            {{-- === AKHIR DARI <thead> === --}}
+
+                            {{-- === BODY TABEL (<tbody>) DISESUAIKAN DENGAN KOLOM BARU === --}}
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @forelse ($books as $book)
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $book->title }}</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ $book->genre }}</div>
                                         </td>
+                                        
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                             {{ $book->author }}
                                         </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $book->genre }}
+                                        </td>
+                                        
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            @if ($book->status == 'AVAILABLE')
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                    Tersedia
+                                                </span>
+                                            @else
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                    Dipinjam
+                                                </span>
+                                            @endif
+                                        </td>
+
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex items-center justify-end gap-4">
                                                 <a href="{{ route('admin.books.edit', $book) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900">Edit</a>
@@ -62,7 +100,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="px-6 py-12 whitespace-nowrap text-center text-sm text-gray-500">
+                                        <td colspan="5" class="px-6 py-12 whitespace-nowrap text-center text-sm text-gray-500">
                                             Data buku belum tersedia.
                                         </td>
                                     </tr>
@@ -73,7 +111,8 @@
 
                     @if ($books->hasPages())
                         <div class="mt-6">
-                            {{ $books->links() }}
+                            {{-- Paginasi diperbarui agar mengingat filter sorting --}}
+                            {{ $books->appends(request()->query())->links() }}
                         </div>
                     @endif
 

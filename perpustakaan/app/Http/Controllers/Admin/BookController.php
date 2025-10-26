@@ -9,10 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Request $request) // Tambahkan Request $request
     {
-        $books = Book::latest()->paginate(10);
-        return view('admin.books.index', compact('books'));
+        $query = Book::query();
+
+        // Logika Sorting (BARU)
+        // Cek apakah ada request 'sort' dan 'direction'
+        if ($request->has('sort') && $request->has('direction')) {
+            $query->orderBy($request->sort, $request->direction);
+        } else {
+            // Default sort
+            $query->latest();
+        }
+
+        $books = $query->paginate(10);
+
+        // Kirim parameter sort ke view (untuk ikon panah)
+        return view('admin.books.index', [
+            'books' => $books,
+            'sort' => $request->sort,
+            'direction' => $request->direction,
+        ]);
     }
 
     public function create()
